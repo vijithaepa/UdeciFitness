@@ -1,15 +1,9 @@
 import React, { Component } from 'react'
-import {
-    Text,
-    View,
-    StyleSheet,
-    TouchableHighlight,
-    TouchableNativeFeedback,        // Only used in Android
-    TouchableOpacity,
-    TouchableWithoutFeedback,
-    Slider
-} from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import AddEntry from './components/AddEntry'
+import { Provider } from 'react-redux'
+import { createStore } from "redux";
+import reducer from './reducers'
 
 export default class App extends Component {
 
@@ -20,10 +14,13 @@ export default class App extends Component {
         alert('Hello')
     }
 
+    store = createStore(reducer)
+
     render() {
         return (
-            <View style={styles.container}>
-                {/*<TouchableHighlight style={styles.btn} onPress={this.handlePress} underlayColor='#d4271b'>
+            <Provider store={this.store}>
+                <View style={styles.container}>
+                    {/*<TouchableHighlight style={styles.btn} onPress={this.handlePress} underlayColor='#d4271b'>
                     <Text style={styles.btnText}>Touchable highlight</Text>
                 </TouchableHighlight>
                 <TouchableOpacity style={styles.btn} onPress={this.handlePress}>
@@ -34,22 +31,23 @@ export default class App extends Component {
                         <Text style={styles.btnText}>Touchable Without feedback</Text>
                     </View>
                 </TouchableWithoutFeedback>*/}
-                {/*TouchableNativeFeedback only supports for Android platform
+                    {/*TouchableNativeFeedback only supports for Android platform
                 <TouchableNativeFeedback onPress={this.handlePress}>
                     <View style={styles.btn}>
                         <Text style={styles.btnText}>Touchable Without feedback</Text>
                     </View>
                 </TouchableNativeFeedback>*/}
-                {/*<Slider*/}
-                {/*    value={this.state.value}*/}
-                {/*    minimumValue={-10} maximumValue={10}*/}
-                {/*    step={1}*/}
-                {/*    onValueChange={(value)=> this.setState(()=> ({value}))}/>*/}
-                {/*<Text>*/}
-                {/*    value: {this.state.value}*/}
-                {/*</Text>*/}
-                <AddEntry />
-            </View>
+                    {/*<Slider*/}
+                    {/*    value={this.state.value}*/}
+                    {/*    minimumValue={-10} maximumValue={10}*/}
+                    {/*    step={1}*/}
+                    {/*    onValueChange={(value)=> this.setState(()=> ({value}))}/>*/}
+                    {/*<Text>*/}
+                    {/*    value: {this.state.value}*/}
+                    {/*</Text>*/}
+                    <AddEntry/>
+                </View>
+            </Provider>
         )
     }
 }
