@@ -2,7 +2,7 @@ import { ADD_ENTRY, RECEIVE_ENTRIES } from "../actions";
 
 function entries(state = {}, action) {
 
-    switch (action) {
+    switch (action.type) {
         case ADD_ENTRY:
             console.log("Adding ", action.entry)
             return {
