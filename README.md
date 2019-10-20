@@ -4,7 +4,14 @@ create-react-native-app NativeAppExamples
 First, it important to know that all of the core components in React Native can accept a prop named style
 
 Libraries for CSS in JS:
-Two of the most popular are Glamorous and Styled Components
+Two of the most popular are `Glamorous` and `Styled` Components
+
+### components to handle "tapping gestures," or what is called Touchables
+  - Button
+  - TouchableHighlight
+  - TouchableOpacity
+  - TouchableNativeFeedback
+  - TouchableWithoutFeedback
 
 ### Flexbox
 - Flexbox Axes

@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
-import { Text, TouchableOpacity, View, Slider } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { getDailyReminderValue, getMetricMetaInfo, timeToString } from '../utils/helpers'
 import UdaciSlider from './UdaciSlider'
 import UdacityStepper from './UdaciStepper'
 import DateHeader from "./DateHeader"
-import {Ionicons} from '@expo/vector-icons'
+import { Ionicons } from '@expo/vector-icons'
 import TextButton from "./TextButton"
 import { removeEntry, submitEntry } from "../utils/api"
-import {connect} from 'react-redux'
-import {addEntry} from "../actions";
+import { connect } from 'react-redux'
+import { addEntry } from "../actions";
+import { white } from "../utils/colors";
 
 function SubmitBtn({onPress}) {
     return (
@@ -103,7 +104,7 @@ class AddEntry extends Component {
     render() {
         const metaInfo = getMetricMetaInfo()
 
-        if(this.props.alreadyLogged) {
+        if (this.props.alreadyLogged) {
             return (
                 <View>
                     <Ionicons
@@ -111,7 +112,7 @@ class AddEntry extends Component {
                         size={100}
                     />
                     <Text>You already logged your information for today</Text>
-                    <TextButton onPress={this.reset}  >
+                    <TextButton onPress={this.reset}>
                         Reset
                     </TextButton>
                 </View>
@@ -152,6 +153,16 @@ class AddEntry extends Component {
     }
 
 }
+
+const styles = StyleSheet.create({
+    iosSubmitBtn: {},
+    androidSubmitBtn:{},
+    btnText: {
+        color: white,
+        fontSize: 22,
+        textAlign: 'center'
+    }
+})
 
 function mapStateToProps(state) {
     const key = timeToString()
