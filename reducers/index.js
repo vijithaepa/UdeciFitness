@@ -4,7 +4,6 @@ function entries(state = {}, action) {
 
     switch (action.type) {
         case ADD_ENTRY:
-            console.log("Adding ", action.entry)
             return {
                 ...state,
                 ...action.entry

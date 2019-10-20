@@ -11,7 +11,6 @@ export function receiveEntries(entries) {
 
 export function addEntry(entry) {
 
-    console.log("Adding action", entry)
     return {
         type: ADD_ENTRY,
         entry
