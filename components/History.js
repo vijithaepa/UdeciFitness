@@ -1,20 +1,21 @@
-import React, {Component} from 'react'
-import {View, Text} from 'react-native'
-import {connect} from 'react-redux'
+import React, { Component } from 'react'
+import { Text, View } from 'react-native'
+import { connect } from 'react-redux'
 import { fetchCalenderResult } from "../utils/api";
-import { ADD_ENTRY, addEntry, receiveEntries } from "../actions";
+import { addEntry, receiveEntries } from "../actions";
 import { getDailyReminderValue, timeToString } from "../utils/helpers";
+import UdaciFitnessCalendar from 'udacifitness-calendar'
 
 
-class History extends Component{
+class History extends Component {
 
     componentDidMount() {
         const {dispatch} = this.props
 
         fetchCalenderResult()
-            .then((entries)=> dispatch(receiveEntries(entries)))
+            .then((entries) => dispatch(receiveEntries(entries)))
             .then(({entries}) => {
-                if(!entries[timeToString()]){
+                if (!entries[timeToString()]) {
                     dispatch(addEntry({
                         [timeToString()]: getDailyReminderValue()
                     }))
@@ -22,11 +23,36 @@ class History extends Component{
             })
     }
 
-    render() {
+    renderItem = ({today, ...entries}, formattedDate, key) => (
+        <View>
+            {today
+                ? <Text>{JSON.stringify(today)}</Text>
+                : <Text>{JSON.stringify(entries)}</Text>
+            }
+        </View>
+    )
+
+    renderEmptyDay = (formattedDate) => {
         return (
             <View>
-                <Text>{JSON.stringify(this.props)}</Text>
+                <Text>
+                    No data for the day
+                </Text>
             </View>
+        )
+
+    }
+
+    render() {
+
+        const {entries} = this.props
+
+        return (
+            <UdaciFitnessCalendar
+                items={entries}
+                renderItem={this.renderItem}
+                renderEmptyDay={this.renderEmptyDay}
+            />
         );
     }
 }
