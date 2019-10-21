@@ -17,9 +17,8 @@ export default class App extends Component {
         return (
             <Provider store={this.store}>
                 <View style={{flex: 1}}>
-                    <View style={{height: 20}}>
+                    <View style={{height: 20}} />
                         <History/>
-                    </View>
                 </View>
             </Provider>
         )
