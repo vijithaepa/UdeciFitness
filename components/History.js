@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Platform } from 'react-native'
+import { Platform, StyleSheet, Text, View } from 'react-native'
 import { connect } from 'react-redux'
 import { fetchCalenderResult } from "../utils/api";
 import { addEntry, receiveEntries } from "../actions";
@@ -7,11 +7,15 @@ import { getDailyReminderValue, timeToString } from "../utils/helpers";
 import UdaciFitnessCalendar from 'udacifitness-calendar'
 import { white } from "../utils/colors";
 import DateHeader from "./DateHeader";
-import TouchableOpacity from "react-native-web/dist/exports/TouchableOpacity";
 import MetricCard from "./MetricCard";
 
+import { AppLoading } from "expo";
 
 class History extends Component {
+
+    state = {
+        ready: false
+    }
 
     componentDidMount() {
         const {dispatch} = this.props
@@ -25,18 +29,21 @@ class History extends Component {
                     }))
                 }
             })
+            .then(() => this.setState(() => ({
+                ready: true
+            })))
     }
 
     renderItem = ({today, ...metrics}, formattedDate, key) => (
         <View style={styles.item}>
             {today
                 ? <View>
-                    <DateHeader date={formattedDate} />
+                    <DateHeader date={formattedDate}/>
                     <Text style={styles.noDataText}>
                         {today}
                     </Text>
                 </View>
-                : <MetricCard metrics={metrics} date={formattedDate} />
+                : <MetricCard metrics={metrics} date={formattedDate}/>
             }
         </View>
     )
@@ -44,7 +51,7 @@ class History extends Component {
     renderEmptyDay = (formattedDate) => {
         return (
             <View style={styles.item}>
-                <DateHeader date={formattedDate} />
+                <DateHeader date={formattedDate}/>
                 <Text style={styles.noDataText}>
                     You didn't log any data for the day
                 </Text>
@@ -56,7 +63,14 @@ class History extends Component {
     render() {
 
         const {entries} = this.props
+        const {ready} = this.state
 
+
+        if (ready === false) {
+            return (
+                <AppLoading/>
+            )
+        }
         return (
             <UdaciFitnessCalendar
                 items={entries}
@@ -70,7 +84,7 @@ class History extends Component {
 const styles = StyleSheet.create({
     item: {
         backgroundColor: white,
-        borderRadius: Platform.OS === 'ios' ? 16: 2,
+        borderRadius: Platform.OS === 'ios' ? 16 : 2,
         padding: 20,
         marginLeft: 10,
         marginRight: 10,
