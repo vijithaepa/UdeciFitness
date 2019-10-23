@@ -8,6 +8,7 @@ import UdaciFitnessCalendar from 'udacifitness-calendar'
 import { white } from "../utils/colors";
 import DateHeader from "./DateHeader";
 import TouchableOpacity from "react-native-web/dist/exports/TouchableOpacity";
+import MetricCard from "./MetricCard";
 
 
 class History extends Component {
@@ -26,7 +27,7 @@ class History extends Component {
             })
     }
 
-    renderItem = ({today, ...entries}, formattedDate, key) => (
+    renderItem = ({today, ...metrics}, formattedDate, key) => (
         <View style={styles.item}>
             {today
                 ? <View>
@@ -35,11 +36,7 @@ class History extends Component {
                         {today}
                     </Text>
                 </View>
-                : <TouchableOpacity onPress={()=> console.log("Pressed")} >
-                    <Text>
-                        {JSON.stringify(metrics)}
-                    </Text>
-                </TouchableOpacity>
+                : <MetricCard metrics={metrics} date={formattedDate} />
             }
         </View>
     )
