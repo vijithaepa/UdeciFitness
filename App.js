@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, View } from 'react-native'
+import { Platform, StyleSheet, View , StatusBar} from 'react-native'
 import { Provider } from 'react-redux'
 import { createStore } from "redux";
 import reducer from './reducers'
 import History from "./components/History";
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
 import { createAppContainer, createBottomTabNavigator } from 'react-navigation'
-// import { createBottomTabNavigator } from 'react-navigation-tabs'
+import Constants from 'expo-constants'
 import AddEntry from "./components/AddEntry";
 import { pink, purple, white } from "./utils/colors";
 
@@ -33,10 +33,10 @@ const Tabs = createBottomTabNavigator({
             header: null
         },
         tabBarOptions: {
-            activeTintColor: Platform.OS === 'ios'? purple: white,
+            activeTintColor: Platform.OS === 'ios' ? purple : white,
             style: {
                 height: 56,
-                backgroundColor: Platform.OS === 'ios'? white: purple,
+                backgroundColor: Platform.OS === 'ios' ? white : purple,
                 shadowColor: 'rgba(0,0,0,0.24)',
                 shadowOffset: {
                     width: 0,
@@ -50,6 +50,13 @@ const Tabs = createBottomTabNavigator({
 
 const TabsView = createAppContainer(Tabs)
 
+function UdaciStatusBar({backgroundColor, ...props}) {
+    return (
+        <View style={{backgroundColor, height: Constants.statusBarHeight}}>
+            <StatusBar translucent backgroundColor={backgroundColor} {...props}/>
+        </View>
+    )
+}
 
 export default class App extends Component {
 
@@ -63,8 +70,8 @@ export default class App extends Component {
         return (
             <Provider store={this.store}>
                 <View style={{flex: 1}}>
-                    <View style={{height: 20}}/>
-                    <TabsView />
+                    <UdaciStatusBar backgroundColor={white} bar-style='light-content'/>
+                    <TabsView/>
                 </View>
             </Provider>
         )
