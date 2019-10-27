@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, View , StatusBar} from 'react-native'
+import { Platform, StatusBar, StyleSheet, View } from 'react-native'
 import { Provider } from 'react-redux'
 import { createStore } from "redux";
 import reducer from './reducers'
 import History from "./components/History";
 import { FontAwesome, Ionicons } from '@expo/vector-icons';
-import { createAppContainer, createBottomTabNavigator } from 'react-navigation'
+import { createAppContainer, createBottomTabNavigator, createStackNavigator } from 'react-navigation'
+// import { createStackNavigator } from 'react-navigation-stack';
 import Constants from 'expo-constants'
 import AddEntry from "./components/AddEntry";
-import { pink, purple, white } from "./utils/colors";
+import { purple, white } from "./utils/colors";
+import EntryDetail from './components/EntryDetail'
 
 const Tabs = createBottomTabNavigator({
         History: {
@@ -50,6 +52,21 @@ const Tabs = createBottomTabNavigator({
 
 const TabsView = createAppContainer(Tabs)
 
+const StackView = createAppContainer(createStackNavigator({
+    Home: {
+        screen: TabsView
+    },
+    EntryDetail: {
+        screen: EntryDetail,
+        navigationOptions: {
+            headerTintColor: white,
+            headerStyle: {
+                backgroundColor: purple
+            }
+        }
+    }
+}))
+
 function UdaciStatusBar({backgroundColor, ...props}) {
     return (
         <View style={{backgroundColor, height: Constants.statusBarHeight}}>
@@ -71,7 +88,7 @@ export default class App extends Component {
             <Provider store={this.store}>
                 <View style={{flex: 1}}>
                     <UdaciStatusBar backgroundColor={white} bar-style='light-content'/>
-                    <TabsView/>
+                    <StackView/>
                 </View>
             </Provider>
         )

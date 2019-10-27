@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Platform, StyleSheet, Text, View } from 'react-native'
+import { Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux'
 import { fetchCalenderResult } from "../utils/api";
 import { addEntry, receiveEntries } from "../actions";
@@ -43,7 +43,15 @@ class History extends Component {
                         {today}
                     </Text>
                 </View>
-                : <MetricCard metrics={metrics} date={formattedDate}/>
+                : <View>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate(
+                        'EntryDetail',
+                        {entryId: key}
+                    )}>
+                        <MetricCard metrics={metrics} date={formattedDate}/>
+                    </TouchableOpacity>
+                </View>
+
             }
         </View>
     )
