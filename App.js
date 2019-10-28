@@ -52,7 +52,7 @@ const Tabs = createBottomTabNavigator({
 
 const TabsView = createAppContainer(Tabs)
 
-const StackView = createAppContainer(createStackNavigator({
+const MainNavigation = createAppContainer(createStackNavigator({
     Home: {
         screen: TabsView
     },
@@ -88,7 +88,7 @@ export default class App extends Component {
             <Provider store={this.store}>
                 <View style={{flex: 1}}>
                     <UdaciStatusBar backgroundColor={white} bar-style='light-content'/>
-                    <StackView/>
+                    <MainNavigation/>
                 </View>
             </Provider>
         )
