@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Foundation } from '@expo/vector-icons'
 import { purple, white } from '../utils/colors'
+import { Location, Permissions } from 'expo'
+import { calculateDirection } from "../utils/helpers";
+// import * as Location from 'expo-location';
 
 export default class Live extends Component {
 
@@ -11,8 +14,39 @@ export default class Live extends Component {
         direction: ''
     }
 
+    componentDidMount() {
+        Permissions.getAsync(Permissions.LOCATION)
+            .then(({status}) => {
+                if (status === 'granted') {
+                    return this.setLocation()
+                }
+                this.setState(() => {
+                    status
+                })
+            })
+            .catch((error)=> {
+                console.log('Error getting location permission: ', error)
+            })
+    }
+
     askPermission = () => {
 
+    }
+
+    setLocation = () => {
+        Location.wachPositionAsync({
+            enableHighAccuracy: true,
+            timeInterval: 1,
+            distanceInterval: 1,
+        }), (cords) => {
+            const newDirection = calculateDirection(cords.heading)
+            const {direction} = this.state
+            this.setState(() => ({
+                cords,
+                status: 'granted',
+                direction: newDirection
+            }))
+        }
     }
 
     render() {
@@ -51,7 +85,7 @@ export default class Live extends Component {
                 <View style={styles.metricContainer}>
                     <View style={styles.metric}>
                         <Text style={[styles.header, {color: white}]}>
-                                Altitude
+                            Altitude
                         </Text>
                         <Text style={[styles.subHeader, {color: white}]}>
                             {200} metres
