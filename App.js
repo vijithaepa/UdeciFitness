@@ -11,6 +11,7 @@ import Constants from 'expo-constants'
 import AddEntry from "./components/AddEntry";
 import { purple, white } from "./utils/colors";
 import EntryDetail from './components/EntryDetail'
+import Live from "./components/Live";
 
 const Tabs = createBottomTabNavigator({
         History: {
@@ -29,6 +30,14 @@ const Tabs = createBottomTabNavigator({
                                                                                color={tintColor}/>
             }
         },
+        Live: {
+            screen: Live,
+            navigationOptions: {
+                tabBarLabel: 'Live',
+                tabBarIcon: ({focused, horizontal, tintColor}) =>
+                    <Ionicons name='ios-speedometer' size={30} color={tintColor}/>
+            }
+        }
     },
     {
         navigationOptions: {
