@@ -2,27 +2,30 @@ import React, { Component } from 'react'
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Foundation } from '@expo/vector-icons'
 import { purple, white } from '../utils/colors'
-import { Location, Permissions } from 'expo'
+import * as Location from 'expo-location';
+import * as Permissions from 'expo-permissions'
 import { calculateDirection } from "../utils/helpers";
+import { PermissionDetailsLocationIOS, PermissionType } from "expo-permissions/src/Permissions.types";
 // import * as Location from 'expo-location';
 
 export default class Live extends Component {
 
     state = {
         cords: null,
-        status: 'granted',
+        status: '',
         direction: ''
     }
 
     componentDidMount() {
         Permissions.getAsync(Permissions.LOCATION)
             .then(({status}) => {
+                console.log('Permissions ', status)
                 if (status === 'granted') {
                     return this.setLocation()
                 }
-                this.setState(() => {
+                this.setState(() => ({
                     status
-                })
+                }))
             })
             .catch((error)=> {
                 console.log('Error getting location permission: ', error)
@@ -34,24 +37,25 @@ export default class Live extends Component {
     }
 
     setLocation = () => {
-        Location.wachPositionAsync({
+        Location.watchPositionAsync({
             enableHighAccuracy: true,
             timeInterval: 1,
             distanceInterval: 1,
-        }), (cords) => {
-            const newDirection = calculateDirection(cords.heading)
-            const {direction} = this.state
-            this.setState(() => ({
-                cords,
-                status: 'granted',
-                direction: newDirection
-            }))
-        }
+        },
+            ({cords}) => {
+                const newDirection = calculateDirection(cords.heading)
+                const {direction} = this.state
+                this.setState(() => ({
+                    cords,
+                    status: 'granted',
+                    direction: newDirection
+                }))
+            })
     }
 
     render() {
         const {cords, direction, status} = this.state
-
+        console.log('State ', this.state)
         if (status === null) {
             return <ActivityIndicator style={{marginTop: 30}}/>
         }
