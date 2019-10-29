@@ -5,21 +5,18 @@ import { purple, white } from '../utils/colors'
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions'
 import { calculateDirection } from "../utils/helpers";
-import { PermissionDetailsLocationIOS, PermissionType } from "expo-permissions/src/Permissions.types";
-// import * as Location from 'expo-location';
 
 export default class Live extends Component {
 
     state = {
-        cords: null,
-        status: '',
+        coords: null,
+        status: null,
         direction: ''
     }
 
     componentDidMount() {
         Permissions.getAsync(Permissions.LOCATION)
             .then(({status}) => {
-                console.log('Permissions ', status)
                 if (status === 'granted') {
                     return this.setLocation()
                 }
@@ -27,26 +24,39 @@ export default class Live extends Component {
                     status
                 }))
             })
-            .catch((error)=> {
+            .catch((error) => {
                 console.log('Error getting location permission: ', error)
             })
     }
 
     askPermission = () => {
-
+        Permissions.askAsync(Permissions.LOCATION)
+            .then(({status}) => {
+                if (status === 'granted') {
+                    return this.setLocation()
+                }
+                this.setState(() => ({
+                    status
+                }))
+            })
+            .catch((error) => {
+                console.log('Error asking permission: ', error)
+            })
     }
 
     setLocation = () => {
         Location.watchPositionAsync({
-            enableHighAccuracy: true,
-            timeInterval: 1,
-            distanceInterval: 1,
-        },
-            ({cords}) => {
-                const newDirection = calculateDirection(cords.heading)
+                enableHighAccuracy: true,
+                timeInterval: 1,
+                distanceInterval: 1,
+            },
+            (response) => {
+                const {coords} = response
+                // console.log('response ', response)   // very useful details for location.
+                const newDirection = calculateDirection(coords.heading)
                 const {direction} = this.state
                 this.setState(() => ({
-                    cords,
+                    coords,
                     status: 'granted',
                     direction: newDirection
                 }))
@@ -54,8 +64,7 @@ export default class Live extends Component {
     }
 
     render() {
-        const {cords, direction, status} = this.state
-        console.log('State ', this.state)
+        const {coords, direction, status} = this.state
         if (status === null) {
             return <ActivityIndicator style={{marginTop: 30}}/>
         }
@@ -68,6 +77,7 @@ export default class Live extends Component {
                 </View>
             )
         }
+
         if (status === 'undetermined') {
             return (
                 <View style={styles.center}>
@@ -84,7 +94,7 @@ export default class Live extends Component {
             <View style={styles.container}>
                 <View>
                     <Text style={styles.header}>You are heading</Text>
-                    <Text style={styles.direction}>North</Text>
+                    <Text style={styles.direction}>{direction}</Text>
                 </View>
                 <View style={styles.metricContainer}>
                     <View style={styles.metric}>
@@ -92,7 +102,7 @@ export default class Live extends Component {
                             Altitude
                         </Text>
                         <Text style={[styles.subHeader, {color: white}]}>
-                            {200} metres
+                            {Math.round(coords.altitude * 3.28084)} metres
                         </Text>
                     </View>
                     <View style={styles.metric}>
@@ -100,7 +110,7 @@ export default class Live extends Component {
                             Speed
                         </Text>
                         <Text style={[styles.subHeader, {color: white}]}>
-                            {250} KMh
+                            {(coords.speed * 2.2369).toFixed(1)} KMh
                         </Text>
                     </View>
                 </View>
