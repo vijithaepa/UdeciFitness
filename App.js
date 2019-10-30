@@ -13,6 +13,7 @@ import { purple, white } from "./utils/colors";
 import EntryDetail from './components/EntryDetail'
 import Live from "./components/Live";
 import {setLocalNotification} from "./utils/helpers";
+import ImagePicker from "./components/ImagePicker";
 
 const Tabs = createBottomTabNavigator({
         History: {
@@ -37,6 +38,14 @@ const Tabs = createBottomTabNavigator({
                 tabBarLabel: 'Live',
                 tabBarIcon: ({focused, horizontal, tintColor}) =>
                     <Ionicons name='ios-speedometer' size={30} color={tintColor}/>
+            }
+        },
+        ImagePicker: {
+            screen: ImagePicker,
+            navigationOptions: {
+                tabBarLabel: 'Pick Image',
+                tabBarIcon: ({focused, horizontal, tintColor}) =>
+                    <Ionicons name='ios-photos' size={30} color={tintColor}/>
             }
         }
     },
