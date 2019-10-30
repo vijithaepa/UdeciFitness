@@ -12,6 +12,7 @@ import AddEntry from "./components/AddEntry";
 import { purple, white } from "./utils/colors";
 import EntryDetail from './components/EntryDetail'
 import Live from "./components/Live";
+import {setLocalNotification} from "./utils/helpers";
 
 const Tabs = createBottomTabNavigator({
         History: {
@@ -88,6 +89,10 @@ export default class App extends Component {
 
     state = {
         value: 0
+    }
+
+    componentDidMount() {
+        setLocalNotification()
     }
 
     store = createStore(reducer)
